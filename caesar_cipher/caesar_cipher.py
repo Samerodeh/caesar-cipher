@@ -24,7 +24,7 @@ def decrypt(plain_text_phrase, numeric_shift):
     return encrypt(plain_text_phrase, numeric_shift * -1)
 
 def crack(plain_text_phrase):
-    text = " "
+    text = ''
     percentage = 100
 
     if not plain_text_phrase:
