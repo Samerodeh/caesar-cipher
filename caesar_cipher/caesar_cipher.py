@@ -1,6 +1,8 @@
 import nltk 
-from nltk.corpus import words, names
+from nltk.corpus import words, names, jeita
 import re
+
+from nltk.corpus.reader.chasen import test
 
 nltk.download('words', quiet=True)
 nltk.download('names', quiet=True)
@@ -23,33 +25,36 @@ def encrypt(plain_text_phrase, numeric_shift):
 def decrypt(plain_text_phrase, numeric_shift):
     return encrypt(plain_text_phrase, numeric_shift * -1)
 
+
 def crack(plain_text_phrase):
-    text = ''
+
+    text = {}
+    test = 1
     percentage = 100
 
     if not plain_text_phrase:
-        return 
+        return None
 
-    for numeric_shift in range(0,26):
-        word = decrypt(plain_text_phrase, numeric_shift)
-        words = word.split()
+    for i in range(0, 26):
         count_words = 0
-        for word in words:
-            check_word = re.sub(r"[^a-zA-Z]+", " ", word).lower()
-            if check_word in word_list:
+        phrase = decrypt(plain_text_phrase, test)
+        phrase1 = phrase.split()
+
+        for word in phrase1:
+            if word in word_list or word in name_list:
                 count_words += 1
-        words_percentage = int(count_words / len(words) * 100)
 
-        if words_percentage > percentage:
-            percentage = words_percentage
-            text = word
+        percentage = int(count_words / len(phrase1) * 100)
+        text[test] = percentage
+        test += 1
 
-    return text
+    crackKey = max(text, key = text.get)
+    return decrypt(plain_text_phrase, crackKey)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
    sam = "Samer Odeh"
-   print(f"\n{encrypt(sam, 6)}")
-   print(f"\n{crack(sam)}\n")
-   print(f"{decrypt(sam, 0)}\n")
+   print(f"\n{encrypt(sam, 6)}\n")
+   print(f"\n{decrypt(sam, 0)}\n")
+   print(f"\n{crack(encrypt(sam, 3))}\n")

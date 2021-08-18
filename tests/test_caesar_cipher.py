@@ -15,7 +15,6 @@ def test_decrypt():
     assert actual == expected 
 
 def test_crack():
-    text = ''
-    actual = (text)
-    expected = ''
+    actual = crack(encrypt("Samer odeh", 3))
+    expected = "ucogt qfgj"
     assert actual == expected
